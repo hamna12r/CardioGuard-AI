@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: cardioguard-ai
+    env: python
+    buildCommand: pip install -r requirements.txt && python data/make_dataset.py && python -m model.train
+    startCommand: uvicorn app.main.app --host 0.0.0.0 --port $PORT
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.6
+      - key: DEBUG
+        value: "false"

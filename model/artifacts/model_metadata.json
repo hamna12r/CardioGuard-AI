@@ -1,0 +1,331 @@
+{
+  "model_name": "Logistic Regression",
+  "model_type": "LogisticRegression",
+  "trained_at": "2026-08-17T17:12:59.238262Z",
+  "dataset_size": 6000,
+  "training_samples": 4800,
+  "test_samples": 1200,
+  "features": [
+    "age",
+    "gender",
+    "systolic_bp",
+    "diastolic_bp",
+    "cholesterol",
+    "glucose",
+    "bmi",
+    "smoking",
+    "alcohol_intake",
+    "physical_activity",
+    "resting_ecg",
+    "max_heart_rate",
+    "chest_pain_type",
+    "exercise_angina"
+  ],
+  "feature_importances": {
+    "age": {
+      "display_name": "Age (years)",
+      "importance_pct": 13.66
+    },
+    "systolic_bp": {
+      "display_name": "Systolic Blood Pressure (mmHg)",
+      "importance_pct": 13.47
+    },
+    "cholesterol": {
+      "display_name": "Total Serum Cholesterol (mg/dL)",
+      "importance_pct": 10.93
+    },
+    "glucose": {
+      "display_name": "Fasting Blood Glucose (mg/dL)",
+      "importance_pct": 9.78
+    },
+    "exercise_angina": {
+      "display_name": "Exercise-Induced Angina",
+      "importance_pct": 9.35
+    },
+    "max_heart_rate": {
+      "display_name": "Max Heart Rate (bpm)",
+      "importance_pct": 8.17
+    },
+    "smoking": {
+      "display_name": "Tobacco Smoking",
+      "importance_pct": 7.07
+    },
+    "bmi": {
+      "display_name": "Body Mass Index (kg/m\u00b2)",
+      "importance_pct": 6.84
+    },
+    "physical_activity": {
+      "display_name": "Physical Activity Level",
+      "importance_pct": 5.5
+    },
+    "chest_pain_type": {
+      "display_name": "Chest Pain Classification",
+      "importance_pct": 4.9
+    },
+    "gender": {
+      "display_name": "Biological Sex",
+      "importance_pct": 4.65
+    },
+    "resting_ecg": {
+      "display_name": "Resting ECG Results",
+      "importance_pct": 2.83
+    },
+    "diastolic_bp": {
+      "display_name": "Diastolic Blood Pressure (mmHg)",
+      "importance_pct": 1.53
+    },
+    "alcohol_intake": {
+      "display_name": "Alcohol Consumption",
+      "importance_pct": 1.32
+    }
+  },
+  "best_model_metrics": {
+    "model_name": "Logistic Regression",
+    "accuracy": 0.7758,
+    "precision": 0.7207,
+    "recall": 0.6718,
+    "f1_score": 0.6954,
+    "roc_auc": 0.8557,
+    "brier_score": 0.1486,
+    "confusion_matrix": [
+      [
+        624,
+        119
+      ],
+      [
+        150,
+        307
+      ]
+    ],
+    "classification_report": {
+      "0": {
+        "precision": 0.8062015503875969,
+        "recall": 0.8398384925975774,
+        "f1-score": 0.8226763348714569,
+        "support": 743.0
+      },
+      "1": {
+        "precision": 0.7206572769953051,
+        "recall": 0.6717724288840262,
+        "f1-score": 0.695356738391846,
+        "support": 457.0
+      },
+      "accuracy": 0.7758333333333334,
+      "macro avg": {
+        "precision": 0.763429413691451,
+        "recall": 0.7558054607408018,
+        "f1-score": 0.7590165366316515,
+        "support": 1200.0
+      },
+      "weighted avg": {
+        "precision": 0.7736234396040325,
+        "recall": 0.7758333333333334,
+        "f1-score": 0.7741887885454717,
+        "support": 1200.0
+      }
+    },
+    "cv_roc_auc_mean": 0.856,
+    "cv_roc_auc_std": 0.0194
+  },
+  "all_model_benchmarks": {
+    "Logistic Regression": {
+      "model_name": "Logistic Regression",
+      "accuracy": 0.7758,
+      "precision": 0.7207,
+      "recall": 0.6718,
+      "f1_score": 0.6954,
+      "roc_auc": 0.8557,
+      "brier_score": 0.1486,
+      "confusion_matrix": [
+        [
+          624,
+          119
+        ],
+        [
+          150,
+          307
+        ]
+      ],
+      "classification_report": {
+        "0": {
+          "precision": 0.8062015503875969,
+          "recall": 0.8398384925975774,
+          "f1-score": 0.8226763348714569,
+          "support": 743.0
+        },
+        "1": {
+          "precision": 0.7206572769953051,
+          "recall": 0.6717724288840262,
+          "f1-score": 0.695356738391846,
+          "support": 457.0
+        },
+        "accuracy": 0.7758333333333334,
+        "macro avg": {
+          "precision": 0.763429413691451,
+          "recall": 0.7558054607408018,
+          "f1-score": 0.7590165366316515,
+          "support": 1200.0
+        },
+        "weighted avg": {
+          "precision": 0.7736234396040325,
+          "recall": 0.7758333333333334,
+          "f1-score": 0.7741887885454717,
+          "support": 1200.0
+        }
+      },
+      "cv_roc_auc_mean": 0.856,
+      "cv_roc_auc_std": 0.0194
+    },
+    "Random Forest": {
+      "model_name": "Random Forest",
+      "accuracy": 0.7708,
+      "precision": 0.7264,
+      "recall": 0.6389,
+      "f1_score": 0.6799,
+      "roc_auc": 0.846,
+      "brier_score": 0.1551,
+      "confusion_matrix": [
+        [
+          633,
+          110
+        ],
+        [
+          165,
+          292
+        ]
+      ],
+      "classification_report": {
+        "0": {
+          "precision": 0.793233082706767,
+          "recall": 0.8519515477792732,
+          "f1-score": 0.8215444516547696,
+          "support": 743.0
+        },
+        "1": {
+          "precision": 0.7263681592039801,
+          "recall": 0.6389496717724289,
+          "f1-score": 0.6798603026775321,
+          "support": 457.0
+        },
+        "accuracy": 0.7708333333333334,
+        "macro avg": {
+          "precision": 0.7598006209553736,
+          "recall": 0.7454506097758511,
+          "f1-score": 0.7507023771661508,
+          "support": 1200.0
+        },
+        "weighted avg": {
+          "precision": 0.7677686910061223,
+          "recall": 0.7708333333333334,
+          "f1-score": 0.7675864049192717,
+          "support": 1200.0
+        }
+      },
+      "cv_roc_auc_mean": 0.8431,
+      "cv_roc_auc_std": 0.016
+    },
+    "Gradient Boosting": {
+      "model_name": "Gradient Boosting",
+      "accuracy": 0.7742,
+      "precision": 0.7246,
+      "recall": 0.6565,
+      "f1_score": 0.6889,
+      "roc_auc": 0.8484,
+      "brier_score": 0.1527,
+      "confusion_matrix": [
+        [
+          629,
+          114
+        ],
+        [
+          157,
+          300
+        ]
+      ],
+      "classification_report": {
+        "0": {
+          "precision": 0.8002544529262087,
+          "recall": 0.8465679676985195,
+          "f1-score": 0.8227599738391105,
+          "support": 743.0
+        },
+        "1": {
+          "precision": 0.7246376811594203,
+          "recall": 0.6564551422319475,
+          "f1-score": 0.6888633754305397,
+          "support": 457.0
+        },
+        "accuracy": 0.7741666666666667,
+        "macro avg": {
+          "precision": 0.7624460670428145,
+          "recall": 0.7515115549652335,
+          "f1-score": 0.7558116746348251,
+          "support": 1200.0
+        },
+        "weighted avg": {
+          "precision": 0.7714570656783568,
+          "recall": 0.7741666666666667,
+          "f1-score": 0.7717676859451799,
+          "support": 1200.0
+        }
+      },
+      "cv_roc_auc_mean": 0.8438,
+      "cv_roc_auc_std": 0.015
+    },
+    "XGBoost Classifier": {
+      "model_name": "XGBoost Classifier",
+      "accuracy": 0.7808,
+      "precision": 0.731,
+      "recall": 0.6718,
+      "f1_score": 0.7001,
+      "roc_auc": 0.8522,
+      "brier_score": 0.1505,
+      "confusion_matrix": [
+        [
+          630,
+          113
+        ],
+        [
+          150,
+          307
+        ]
+      ],
+      "classification_report": {
+        "0": {
+          "precision": 0.8076923076923077,
+          "recall": 0.847913862718708,
+          "f1-score": 0.8273145108338805,
+          "support": 743.0
+        },
+        "1": {
+          "precision": 0.7309523809523809,
+          "recall": 0.6717724288840262,
+          "f1-score": 0.7001140250855188,
+          "support": 457.0
+        },
+        "accuracy": 0.7808333333333334,
+        "macro avg": {
+          "precision": 0.7693223443223443,
+          "recall": 0.759843145801367,
+          "f1-score": 0.7637142679596997,
+          "support": 1200.0
+        },
+        "weighted avg": {
+          "precision": 0.7784671855921855,
+          "recall": 0.7808333333333334,
+          "f1-score": 0.7788723258447128,
+          "support": 1200.0
+        }
+      },
+      "cv_roc_auc_mean": 0.8478,
+      "cv_roc_auc_std": 0.0171
+    }
+  },
+  "dataset_statistics": {
+    "mean_age": 54.0,
+    "mean_systolic_bp": 129.0,
+    "mean_cholesterol": 217.4,
+    "mean_glucose": 109.7,
+    "positive_prevalence_pct": 38.12
+  }
+}

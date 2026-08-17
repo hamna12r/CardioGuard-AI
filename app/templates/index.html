@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CardioGuard AI - Clinical Cardiovascular Risk Stratification & Intelligence</title>
+    <meta name="description" content="End-to-End AI platform for cardiovascular disease risk stratification, explainable AI factor attribution, and evidence-based clinical guidance.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <!-- Background Ambient Glow -->
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
+    <!-- Navigation Header -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo-group">
+                <div class="logo-icon-wrapper">
+                    <i class="fa-solid fa-heart-pulse logo-icon"></i>
+                </div>
+                <div class="logo-text">
+                    <h1 class="logo-title">CardioGuard <span class="badge-ai">AI</span></h1>
+                    <p class="logo-subtitle">Cardiovascular Risk Intelligence & Clinical Decision Support</p>
+                </div>
+            </div>
+
+            <nav class="nav-tabs" role="tablist">
+                <button class="nav-tab active" data-tab="assessment-tab" role="tab" id="tab-btn-assessment">
+                    <i class="fa-solid fa-stethoscope"></i> Risk Assessment
+                </button>
+                <button class="nav-tab" data-tab="simulator-tab" role="tab" id="tab-btn-simulator">
+                    <i class="fa-solid fa-sliders"></i> What-If Simulator
+                </button>
+                <button class="nav-tab" data-tab="batch-tab" role="tab" id="tab-btn-batch">
+                    <i class="fa-solid fa-file-csv"></i> Batch Processing
+                </button>
+                <button class="nav-tab" data-tab="metrics-tab" role="tab" id="tab-btn-metrics">
+                    <i class="fa-solid fa-chart-line"></i> Model Analytics
+                </button>
+                <button class="nav-tab" data-tab="api-tab" role="tab" id="tab-btn-api">
+                    <i class="fa-solid fa-code"></i> API Explorer
+                </button>
+            </nav>
+
+            <div class="header-status">
+                <span class="status-indicator"></span>
+                <span class="status-text" id="header-status-text">Model Active</span>
+                <a href="/docs" target="_blank" class="btn btn-sm btn-outline" title="Open API Documentation">
+                    <i class="fa-solid fa-book-medical"></i> Swagger Docs
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Application Container -->
+    <main class="main-content">
+        
+        <!-- ==================== TAB 1: RISK ASSESSMENT ==================== -->
+        <section id="assessment-tab" class="tab-panel active">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Clinical Patient Evaluation</h2>
+                    <p class="panel-desc">Enter physiological biomarkers and diagnostic findings to compute real-time cardiovascular risk probability and actionable clinical insights.</p>
+                </div>
+                <div class="quick-presets">
+                    <span class="preset-label">Load Clinical Presets:</span>
+                    <button class="btn btn-xs btn-preset" id="preset-low-risk">
+                        <i class="fa-solid fa-shield-heart"></i> Healthy Baseline
+                    </button>
+                    <button class="btn btn-xs btn-preset" id="preset-high-risk">
+                        <i class="fa-solid fa-triangle-exclamation"></i> High-Risk Profile
+                    </button>
+                    <button class="btn btn-xs btn-outline" id="btn-reset-form">
+                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid-2col">
+                <!-- Left: Clinical Input Form -->
+                <div class="card form-card">
+                    <form id="patient-assessment-form">
+                        
+                        <!-- Section 1: Demographics & Anthropometrics -->
+                        <div class="form-section">
+                            <h3 class="section-title"><i class="fa-solid fa-user-doctor"></i> 1. Demographics & Anthropometrics</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="input-age">Age (Years) <span class="req">*</span></label>
+                                    <input type="number" id="input-age" name="age" min="18" max="100" value="55" required>
+                                    <span class="input-hint">Range: 18 - 100</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-gender">Biological Sex <span class="req">*</span></label>
+                                    <select id="input-gender" name="gender" required>
+                                        <option value="1" selected>Male</option>
+                                        <option value="0">Female</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-bmi">Body Mass Index (BMI) <span class="req">*</span></label>
+                                    <input type="number" step="0.1" id="input-bmi" name="bmi" min="14.0" max="60.0" value="27.4" required>
+                                    <span class="input-hint">Normal: 18.5 - 24.9 kg/m²</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-max-hr">Max Heart Rate (bpm) <span class="req">*</span></label>
+                                    <input type="number" id="input-max-hr" name="max_heart_rate" min="60" max="220" value="142" required>
+                                    <span class="input-hint">Stress test max bpm</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 2: Hemodynamics & Lab Biomarkers -->
+                        <div class="form-section">
+                            <h3 class="section-title"><i class="fa-solid fa-droplet"></i> 2. Hemodynamics & Biomarkers</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="input-systolic">Systolic BP (mmHg) <span class="req">*</span></label>
+                                    <input type="number" id="input-systolic" name="systolic_bp" min="80" max="240" value="138" required>
+                                    <span class="input-hint">Normal: < 120 mmHg</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-diastolic">Diastolic BP (mmHg) <span class="req">*</span></label>
+                                    <input type="number" id="input-diastolic" name="diastolic_bp" min="50" max="140" value="88" required>
+                                    <span class="input-hint">Normal: < 80 mmHg</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-cholesterol">Total Cholesterol (mg/dL) <span class="req">*</span></label>
+                                    <input type="number" id="input-cholesterol" name="cholesterol" min="100" max="500" value="230" required>
+                                    <span class="input-hint">Desirable: < 200 mg/dL</span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-glucose">Fasting Glucose (mg/dL) <span class="req">*</span></label>
+                                    <input type="number" id="input-glucose" name="glucose" min="50" max="400" value="110" required>
+                                    <span class="input-hint">Normal: 70 - 99 mg/dL</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Lifestyle Factors -->
+                        <div class="form-section">
+                            <h3 class="section-title"><i class="fa-solid fa-person-running"></i> 3. Lifestyle & Behavioral Factors</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="input-smoking">Tobacco Smoking <span class="req">*</span></label>
+                                    <select id="input-smoking" name="smoking" required>
+                                        <option value="1" selected>Active Smoker</option>
+                                        <option value="0">Non-Smoker</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-alcohol">Alcohol Intake <span class="req">*</span></label>
+                                    <select id="input-alcohol" name="alcohol_intake" required>
+                                        <option value="0" selected>No / Rare</option>
+                                        <option value="1">Regular Consumption</option>
+                                    </select>
+                                </div>
+                                <div class="form-group span-2">
+                                    <label for="input-activity">Physical Activity <span class="req">*</span></label>
+                                    <select id="input-activity" name="physical_activity" required>
+                                        <option value="0" selected>Sedentary / Inactive (< 150 min/wk)</option>
+                                        <option value="1">Active (>= 150 min/wk moderate exercise)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section 4: Clinical Diagnostic Findings -->
+                        <div class="form-section">
+                            <h3 class="section-title"><i class="fa-solid fa-wave-square"></i> 4. Diagnostic & Electrocardiographic Findings</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="input-ecg">Resting ECG <span class="req">*</span></label>
+                                    <select id="input-ecg" name="resting_ecg" required>
+                                        <option value="0">Normal</option>
+                                        <option value="1" selected>ST-T Wave Abnormality</option>
+                                        <option value="2">Left Ventricular Hypertrophy (LVH)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-chest-pain">Chest Pain Classification <span class="req">*</span></label>
+                                    <select id="input-chest-pain" name="chest_pain_type" required>
+                                        <option value="0" selected>Typical Angina</option>
+                                        <option value="1">Atypical Angina</option>
+                                        <option value="2">Non-Anginal Pain</option>
+                                        <option value="3">Asymptomatic</option>
+                                    </select>
+                                </div>
+                                <div class="form-group span-2">
+                                    <label for="input-ex-angina">Exercise-Induced Angina <span class="req">*</span></label>
+                                    <select id="input-ex-angina" name="exercise_angina" required>
+                                        <option value="1" selected>Yes (Present during exertion)</option>
+                                        <option value="0">No (Absent)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block btn-lg" id="btn-submit-assessment">
+                            <i class="fa-solid fa-microchip"></i> Evaluate Patient Risk Profile
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Right: Real-Time Results & Clinical Insights -->
+                <div class="results-column">
+                    
+                    <!-- Prediction Banner Card -->
+                    <div class="card result-card" id="risk-result-card">
+                        <div class="result-header">
+                            <div>
+                                <span class="sub-heading">Stratified Risk Assessment</span>
+                                <h3 class="result-classification" id="res-classification">Awaiting Patient Evaluation</h3>
+                            </div>
+                            <span class="risk-pill" id="res-tier-pill">Ready</span>
+                        </div>
+
+                        <!-- Gauge Meter -->
+                        <div class="gauge-container">
+                            <div class="gauge-visual">
+                                <svg viewBox="0 0 200 110" class="gauge-svg">
+                                    <!-- Background Arc -->
+                                    <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="18" stroke-linecap="round"/>
+                                    <!-- Value Arc -->
+                                    <path id="gauge-arc" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#3b82f6" stroke-width="18" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round"/>
+                                </svg>
+                                <div class="gauge-center-text">
+                                    <span class="gauge-value" id="res-percentage">--%</span>
+                                    <span class="gauge-label">CVD Risk Index</span>
+                                </div>
+                            </div>
+                            
+                            <div class="gauge-stats">
+                                <div class="stat-box">
+                                    <span class="stat-label">Model Confidence</span>
+                                    <span class="stat-val" id="res-confidence">--%</span>
+                                </div>
+                                <div class="stat-box">
+                                    <span class="stat-label">Risk Probability</span>
+                                    <span class="stat-val" id="res-probability">--</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- XAI Factor Attribution -->
+                        <div class="xai-section">
+                            <h4 class="sub-title"><i class="fa-solid fa-magnifying-glass-chart"></i> Explainable AI (XAI) Biomarker Breakdown</h4>
+                            <div class="xai-list" id="res-xai-list">
+                                <p class="placeholder-text">Submit clinical values to view patient-specific risk factor attribution.</p>
+                            </div>
+                        </div>
+
+                        <!-- Clinical Guidance Recommendations -->
+                        <div class="recs-section">
+                            <h4 class="sub-title"><i class="fa-solid fa-clipboard-check"></i> Evidence-Based Clinical Recommendations</h4>
+                            <div class="recs-list" id="res-recs-list">
+                                <p class="placeholder-text">Personalized preventive interventions will appear here based on patient risk factors.</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: WHAT-IF SIMULATOR ==================== -->
+        <section id="simulator-tab" class="tab-panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Interactive "What-If" Sensitivity Simulator</h2>
+                    <p class="panel-desc">Simulate potential clinical interventions (e.g., blood pressure reduction, smoking cessation, cholesterol management) in real-time to observe immediate cardiovascular risk reduction.</p>
+                </div>
+            </div>
+
+            <div class="grid-2col">
+                <div class="card">
+                    <h3 class="section-title"><i class="fa-solid fa-sliders"></i> Adjustable Clinical Levers</h3>
+                    
+                    <div class="slider-group">
+                        <div class="slider-header">
+                            <label>Systolic Blood Pressure (mmHg):</label>
+                            <span class="slider-value" id="sim-val-sys">138 mmHg</span>
+                        </div>
+                        <input type="range" class="range-slider" id="sim-range-sys" min="90" max="200" value="138">
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-header">
+                            <label>Total Cholesterol (mg/dL):</label>
+                            <span class="slider-value" id="sim-val-chol">230 mg/dL</span>
+                        </div>
+                        <input type="range" class="range-slider" id="sim-range-chol" min="120" max="350" value="230">
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-header">
+                            <label>Fasting Blood Glucose (mg/dL):</label>
+                            <span class="slider-value" id="sim-val-gluc">110 mg/dL</span>
+                        </div>
+                        <input type="range" class="range-slider" id="sim-range-gluc" min="70" max="250" value="110">
+                    </div>
+
+                    <div class="slider-group">
+                        <div class="slider-header">
+                            <label>Body Mass Index (BMI):</label>
+                            <span class="slider-value" id="sim-val-bmi">27.4</span>
+                        </div>
+                        <input type="range" class="range-slider" id="sim-range-bmi" min="18.0" max="45.0" step="0.5" value="27.4">
+                    </div>
+
+                    <div class="sim-toggle-grid">
+                        <div class="toggle-item">
+                            <label>Tobacco Smoker:</label>
+                            <input type="checkbox" id="sim-check-smoke" checked>
+                        </div>
+                        <div class="toggle-item">
+                            <label>Physically Active:</label>
+                            <input type="checkbox" id="sim-check-active">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card sim-output-card">
+                    <h3 class="section-title"><i class="fa-solid fa-gauge-high"></i> Simulated Risk Trajectory</h3>
+                    <div class="sim-score-display">
+                        <div class="sim-score-box">
+                            <span class="sim-label">Simulated Risk</span>
+                            <span class="sim-number" id="sim-res-score">--%</span>
+                            <span class="sim-tag" id="sim-res-tier">--</span>
+                        </div>
+                    </div>
+                    <div class="sim-impact-summary" id="sim-impact-summary">
+                        Adjust the sliders on the left to simulate clinical risk reduction.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: BATCH PROCESSING ==================== -->
+        <section id="batch-tab" class="tab-panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Batch Patient Risk Analysis via CSV</h2>
+                    <p class="panel-desc">Upload a cohort dataset to perform high-throughput risk stratification across hundreds or thousands of patients simultaneously.</p>
+                </div>
+                <div>
+                    <a href="/api/v1/sample-csv" class="btn btn-outline" download>
+                        <i class="fa-solid fa-download"></i> Download Sample Batch CSV
+                    </a>
+                </div>
+            </div>
+
+            <!-- Drag and drop upload zone -->
+            <div class="card upload-card" id="drop-zone">
+                <i class="fa-solid fa-cloud-arrow-up upload-icon"></i>
+                <h3 class="upload-title">Drag & Drop Patient CSV File</h3>
+                <p class="upload-subtitle">or click to browse from your computer</p>
+                <input type="file" id="batch-file-input" accept=".csv" class="file-input-hidden">
+                <button class="btn btn-primary" id="btn-browse-file">
+                    <i class="fa-solid fa-folder-open"></i> Select CSV File
+                </button>
+            </div>
+
+            <!-- Batch Results Container -->
+            <div id="batch-results-container" class="batch-results-area hidden">
+                <!-- Summary cards -->
+                <div class="stats-grid">
+                    <div class="card stat-card">
+                        <div class="stat-icon icon-blue"><i class="fa-solid fa-users"></i></div>
+                        <div>
+                            <div class="stat-num" id="batch-total">0</div>
+                            <div class="stat-name">Total Patients Evaluated</div>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon icon-red"><i class="fa-solid fa-heart-circle-bolt"></i></div>
+                        <div>
+                            <div class="stat-num" id="batch-high-risk">0</div>
+                            <div class="stat-name">High CVD Risk Identified</div>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon icon-green"><i class="fa-solid fa-heart-circle-check"></i></div>
+                        <div>
+                            <div class="stat-num" id="batch-low-risk">0</div>
+                            <div class="stat-name">Low CVD Risk Cohort</div>
+                        </div>
+                    </div>
+                    <div class="card stat-card">
+                        <div class="stat-icon icon-amber"><i class="fa-solid fa-percent"></i></div>
+                        <div>
+                            <div class="stat-num" id="batch-pct">0%</div>
+                            <div class="stat-name">Cohort High-Risk Prevalence</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preview Table -->
+                <div class="card table-card">
+                    <div class="table-header">
+                        <h3 class="table-title"><i class="fa-solid fa-table"></i> Patient Cohort Risk Stratification (First 10 Preview)</h3>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table" id="batch-preview-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Age</th>
+                                    <th>Sex</th>
+                                    <th>BP (Sys/Dia)</th>
+                                    <th>Cholesterol</th>
+                                    <th>Glucose</th>
+                                    <th>BMI</th>
+                                    <th>Smoking</th>
+                                    <th>CVD Risk %</th>
+                                    <th>Risk Tier</th>
+                                </tr>
+                            </thead>
+                            <tbody id="batch-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: MODEL ANALYTICS ==================== -->
+        <section id="metrics-tab" class="tab-panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">Model Performance & Clinical AI Benchmarks</h2>
+                    <p class="panel-desc">Rigorous statistical evaluation, cross-validation metrics, and feature importance rankings for the deployed machine learning model.</p>
+                </div>
+                <button class="btn btn-outline" id="btn-refresh-metrics">
+                    <i class="fa-solid fa-arrows-rotate"></i> Refresh Metrics
+                </button>
+            </div>
+
+            <!-- KPI Metric Cards -->
+            <div class="stats-grid">
+                <div class="card stat-card">
+                    <div class="stat-icon icon-blue"><i class="fa-solid fa-bullseye"></i></div>
+                    <div>
+                        <div class="stat-num" id="metric-roc-auc">0.856</div>
+                        <div class="stat-name">ROC-AUC Score</div>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-icon icon-green"><i class="fa-solid fa-circle-check"></i></div>
+                    <div>
+                        <div class="stat-num" id="metric-accuracy">77.6%</div>
+                        <div class="stat-name">Test Accuracy</div>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-icon icon-purple"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <div>
+                        <div class="stat-num" id="metric-f1">0.695</div>
+                        <div class="stat-name">F1 Score (Harmonic Mean)</div>
+                    </div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-icon icon-amber"><i class="fa-solid fa-database"></i></div>
+                    <div>
+                        <div class="stat-num" id="metric-records">6,000</div>
+                        <div class="stat-name">Dataset Cohort Size</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2col">
+                <!-- Feature Importance Chart -->
+                <div class="card">
+                    <h3 class="section-title"><i class="fa-solid fa-ranking-star"></i> Global Feature Importance (%)</h3>
+                    <div class="chart-container">
+                        <canvas id="featureImportanceChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- ROC Curve Image Display -->
+                <div class="card">
+                    <h3 class="section-title"><i class="fa-solid fa-chart-area"></i> Multi-Model ROC Curves</h3>
+                    <div class="roc-image-wrapper">
+                        <img src="/api/v1/roc-curve" alt="Multi-Model ROC Comparison Curve" class="roc-image" id="roc-curve-img">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multi-Model Benchmark Comparison Table -->
+            <div class="card table-card mt-4">
+                <div class="table-header">
+                    <h3 class="table-title"><i class="fa-solid fa-code-compare"></i> Candidate Model Cross-Validation & Benchmark Comparison</h3>
+                </div>
+                <div class="table-wrapper">
+                    <table class="data-table" id="benchmark-table">
+                        <thead>
+                            <tr>
+                                <th>Candidate Model</th>
+                                <th>5-Fold CV ROC-AUC</th>
+                                <th>Test Accuracy</th>
+                                <th>Test ROC-AUC</th>
+                                <th>Precision</th>
+                                <th>Recall</th>
+                                <th>F1 Score</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="benchmark-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 5: API EXPLORER ==================== -->
+        <section id="api-tab" class="tab-panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="panel-title">RESTful API Documentation & Integration</h2>
+                    <p class="panel-desc">Seamlessly integrate CardioGuard AI predictions and clinical explanations into electronic health record (EHR) systems, mobile apps, or cloud workflows.</p>
+                </div>
+                <a href="/docs" target="_blank" class="btn btn-primary">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Interactive OpenAPI / Swagger
+                </a>
+            </div>
+
+            <div class="grid-2col">
+                <div class="card">
+                    <h3 class="section-title"><i class="fa-solid fa-paper-plane"></i> Single Prediction Endpoint</h3>
+                    <div class="endpoint-badge"><code>POST /api/v1/predict</code></div>
+                    <p class="endpoint-desc">Accepts a JSON payload containing physiological patient parameters.</p>
+                    
+                    <h4 class="code-header">Example Request (cURL):</h4>
+                    <pre class="code-block"><code>curl -X POST "http://localhost:8000/api/v1/predict" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "age": 58,
+       "gender": 1,
+       "systolic_bp": 145,
+       "diastolic_bp": 92,
+       "cholesterol": 245,
+       "glucose": 125,
+       "bmi": 29.3,
+       "smoking": 1,
+       "alcohol_intake": 0,
+       "physical_activity": 0,
+       "resting_ecg": 1,
+       "max_heart_rate": 135,
+       "chest_pain_type": 0,
+       "exercise_angina": 1
+     }'</code></pre>
+                </div>
+
+                <div class="card">
+                    <h3 class="section-title"><i class="fa-solid fa-reply-all"></i> Structured Response Payload</h3>
+                    <h4 class="code-header">Sample JSON Output:</h4>
+                    <pre class="code-block"><code>{
+  "prediction": 1,
+  "prediction_label": "High Cardiovascular Risk",
+  "risk_probability": 0.8142,
+  "risk_percentage": 81.42,
+  "confidence": 81.42,
+  "risk_tier": "Critical Risk",
+  "risk_color": "#ef4444",
+  "risk_breakdown": [
+    {
+      "feature": "systolic_bp",
+      "display_name": "Systolic Blood Pressure",
+      "patient_value": "145 mmHg",
+      "status": "Stage 2 Hypertension",
+      "impact_level": "Critical"
+    }
+  ],
+  "recommendations": [
+    {
+      "category": "Medical Consultation",
+      "priority": "Immediate",
+      "title": "Urgent Cardiology Evaluation"
+    }
+  ]
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <div class="footer-container">
+            <p><strong>CardioGuard AI</strong> &mdash; End-to-End AI Application Development and Cloud Deployment</p>
+            <p class="footer-meta">Engineered with FastAPI, Scikit-Learn, XGBoost, Docker & Chart.js | Academic Assignment Submission</p>
+        </div>
+    </footer>
+
+    <!-- Frontend Logic -->
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
