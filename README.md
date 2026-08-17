@@ -173,7 +173,7 @@ graph TB
 
     subgraph Cloud Container Runtime
         Docker[Docker Container - Python 3.11-slim]
-        Docker --> Render[Render / Railway / AWS App Runner / GCP Cloud Run]
+        Docker --> Azure[Microsoft Azure App Service / Container Apps]
     end
 ```
 
@@ -191,7 +191,8 @@ graph TB
 - **Testing**: Pytest 9.0.3, HTTPX TestClient
 - **Containerization**: Docker (Multi-stage build), Docker Compose
 - **CI/CD**: GitHub Actions (`ci-cd.yml`)
-- **Supported Cloud Platforms**: Render, Railway, AWS ECS / App Runner, GCP Cloud Run, Hugging Face Spaces
+- **Primary Cloud Platform**: Microsoft Azure (App Service for Containers & Azure Container Apps)
+- **Alternative Cloud Support**: AWS ECS / App Runner, Google Cloud Run
 
 ---
 
@@ -232,7 +233,7 @@ python -m model.train
 pytest -v tests/
 
 # 7. Start the FastAPI development / production server
-uvicorn app.main.app --host 0.0.0.0 --port 8000 --reload
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 Open your browser and navigate to:
@@ -244,74 +245,49 @@ Open your browser and navigate to:
 
 ## 9. Deployment Details
 
-CardioGuard AI is configured for one-click deployment across major cloud providers.
+CardioGuard AI is containerized with Docker and optimized for **Microsoft Azure** (as well as other major cloud platforms).
 
-### Option A: Render Cloud (Recommended - 1-Click Blueprint)
-1. Push this repository to GitHub.
-2. Log into [Render.com](https://render.com) and click **New +** -> **Blueprint**.
-3. Connect your repository. Render will automatically read [`render.yaml`](render.yaml) and configure the build command, start command, and `/health` probe.
-4. Your application will be live at: `https://cardioguard-ai.onrender.com`
+### Primary Deployment Platform: Microsoft Azure
 
-### Option B: Railway Cloud
-1. Create a new project on [Railway.app](https://railway.app).
-2. Deploy from GitHub repository.
-3. Railway automatically detects the `Procfile` and `Dockerfile` and deploys the container with HTTPS.
+#### Method 1: Azure App Service for Containers (via Docker Hub & Azure Portal)
+1. **Push Container to Docker Hub**:
+   ```bash
+   docker login
+   docker build -t <your_dockerhub_username>/cardioguard-ai:latest .
+   docker push <your_dockerhub_username>/cardioguard-ai:latest
+   ```
+2. **Deploy on Azure Portal**:
+   - Go to [Azure Portal](https://portal.azure.com) -> **App Services** -> **+ Create** -> **Web App**.
+   - Under **Basics**, choose **Publish: Container**, **Operating System: Linux**, and your desired pricing tier (e.g. Free F1 or Basic B1).
+   - Under **Container**, select **Image Source: Docker Hub**, **Access Type: Public**, and specify `<your_dockerhub_username>/cardioguard-ai:latest`.
+   - Click **Review + Create**.
+3. **Configure Port in Azure**:
+   - In your deployed App Service, navigate to **Settings** -> **Environment variables** (or **Configuration**).
+   - Add App Setting: `WEBSITES_PORT` = `8000`.
+   - Save and restart the service.
+4. **Live URL**: Accessible globally at `https://<your-app-name>.azurewebsites.net`.
 
-### Option C: AWS App Runner / Amazon ECS
-```bash
-# Build and tag image
-docker build -t cardioguard-ai .
-
-# Authenticate with Amazon ECR
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com
-
-# Tag and push to ECR
-docker tag cardioguard-ai:latest <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/cardioguard-ai:latest
-docker push <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/cardioguard-ai:latest
-
-# Deploy with AWS App Runner pointing to the ECR Image URI
-```
-
-### Option D: Google Cloud Run
-```bash
-# Build and submit container to Google Container Registry
-gcloud builds submit --tag gcr.io/[PROJECT-ID]/cardioguard-ai
-
-# Deploy to Cloud Run
-gcloud run deploy cardioguard-ai \
-  --image gcr.io/[PROJECT-ID]/cardioguard-ai \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --port 8000
-```
-
-### Option E: Microsoft Azure (App Service / Azure Container Apps)
-
-#### Method 1: Azure App Service (via Azure CLI)
+#### Method 2: Azure CLI Deployment
 ```bash
 # 1. Log in to Azure
 az login
 
-# 2. Create a Resource Group
+# 2. Create Resource Group and Service Plan
 az group create --name cardioguard-rg --location eastus
-
-# 3. Create an App Service Linux Plan (B1 or Free F1)
 az appservice plan create --name cardioguard-plan --resource-group cardioguard-rg --is-linux --sku B1
 
-# 4. Deploy container or source code directly
+# 3. Create Web App using Container
 az webapp create \
   --resource-group cardioguard-rg \
   --plan cardioguard-plan \
-  --name cardioguard-ai-<unique-id> \
-  --runtime "PYTHON:3.11" \
-  --startup-file "uvicorn app.main:app --host 0.0.0.0 --port 8000"
+  --name cardioguard-ai-app \
+  --deployment-container-image-name <your_dockerhub_username>/cardioguard-ai:latest
 
-# 5. Set custom port configuration
-az webapp config appsettings set --resource-group cardioguard-rg --name cardioguard-ai-<unique-id> --settings WEBSITES_PORT=8000
+# 4. Set container port
+az webapp config appsettings set --resource-group cardioguard-rg --name cardioguard-ai-app --settings WEBSITES_PORT=8000
 ```
 
-#### Method 2: Azure Container Apps (Serverless Container)
+#### Method 3: Azure Container Apps (Serverless Container)
 ```bash
 # 1. Build and push image to Azure Container Registry (ACR)
 az acr create --resource-group cardioguard-rg --name cardioguardacr --sku Basic --admin-enabled true
@@ -326,6 +302,24 @@ az containerapp create \
   --target-port 8000 \
   --ingress external \
   --query properties.configuration.ingress.fqdn
+```
+
+### Alternative Cloud Platforms (AWS & GCP)
+
+#### AWS App Runner / Amazon ECS
+```bash
+# Build and push to AWS ECR
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com
+docker build -t cardioguard-ai .
+docker tag cardioguard-ai:latest <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/cardioguard-ai:latest
+docker push <aws_account_id>.dkr.ecr.us-east-1.amazonaws.com/cardioguard-ai:latest
+```
+
+#### Google Cloud Run
+```bash
+# Build and submit to Google Container Registry
+gcloud builds submit --tag gcr.io/[PROJECT-ID]/cardioguard-ai
+gcloud run deploy cardioguard-ai --image gcr.io/[PROJECT-ID]/cardioguard-ai --platform managed --region us-central1 --allow-unauthenticated --port 8000
 ```
 
 ---
