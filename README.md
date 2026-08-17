@@ -286,6 +286,48 @@ gcloud run deploy cardioguard-ai \
   --port 8000
 ```
 
+### Option E: Microsoft Azure (App Service / Azure Container Apps)
+
+#### Method 1: Azure App Service (via Azure CLI)
+```bash
+# 1. Log in to Azure
+az login
+
+# 2. Create a Resource Group
+az group create --name cardioguard-rg --location eastus
+
+# 3. Create an App Service Linux Plan (B1 or Free F1)
+az appservice plan create --name cardioguard-plan --resource-group cardioguard-rg --is-linux --sku B1
+
+# 4. Deploy container or source code directly
+az webapp create \
+  --resource-group cardioguard-rg \
+  --plan cardioguard-plan \
+  --name cardioguard-ai-<unique-id> \
+  --runtime "PYTHON:3.11" \
+  --startup-file "uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+# 5. Set custom port configuration
+az webapp config appsettings set --resource-group cardioguard-rg --name cardioguard-ai-<unique-id> --settings WEBSITES_PORT=8000
+```
+
+#### Method 2: Azure Container Apps (Serverless Container)
+```bash
+# 1. Build and push image to Azure Container Registry (ACR)
+az acr create --resource-group cardioguard-rg --name cardioguardacr --sku Basic --admin-enabled true
+az acr build --registry cardioguardacr --image cardioguard-ai:latest .
+
+# 2. Deploy to Azure Container Apps
+az containerapp create \
+  --name cardioguard-app \
+  --resource-group cardioguard-rg \
+  --environment cardioguard-env \
+  --image cardioguardacr.azurecr.io/cardioguard-ai:latest \
+  --target-port 8000 \
+  --ingress external \
+  --query properties.configuration.ingress.fqdn
+```
+
 ---
 
 ## 10. API/Web Application Usage
